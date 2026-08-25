@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="BrandFORGE">
+  <rect width="200" height="200" fill="#0A2E36"/>
+  <rect x="24" y="24" width="152" height="152" fill="none" stroke="#00E5A3" stroke-width="2"/>
+  <circle cx="72" cy="88" r="16" fill="#00E5A3"/>
+  <circle cx="112" cy="88" r="16" fill="#3F7266"/>
+  <rect x="60" y="112" width="80" height="8" fill="#FFFFFF"/>
+  <text x="100" y="160" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-size="13" letter-spacing="2" fill="#3F7266">BRANDFORGE</text>
+</svg>

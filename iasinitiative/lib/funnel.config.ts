@@ -27,6 +27,26 @@ export const funnel = {
     youtube: "https://www.youtube.com/@iautomatesht",
   },
 
+  // ── PRIMARY NAV ────────────────────────────────────────────────────────
+  // Header link set. Tools + About only — no social in the header (social
+  // lives in the footer). Config, not markup, so the set is edited here.
+  nav: [
+    { label: "Tools", href: "/tools" },
+    { label: "About", href: "/about" },
+  ],
+
+  // ── SOCIAL (footer only) ───────────────────────────────────────────────
+  // `key` maps to an inline SVG glyph in SiteFooter. All open in a new tab.
+  social: [
+    { key: "linkedin", label: "LinkedIn", href: "https://www.linkedin.com/company/ias-bootcamp" },
+    { key: "youtube", label: "YouTube", href: "https://www.youtube.com/@iautomatesht" },
+    { key: "tiktok", label: "TikTok", href: "https://www.tiktok.com/@iautomateshit" },
+    { key: "instagram", label: "Instagram", href: "https://www.instagram.com/iautomatesht" },
+    { key: "facebook", label: "Facebook", href: "https://www.facebook.com/profile.php?id=61593049247788" },
+    { key: "x", label: "X", href: "https://x.com/iautomaterobots" },
+    { key: "threads", label: "Threads", href: "https://www.threads.com/@iautomatesht" },
+  ],
+
   // ── VSL HUB ────────────────────────────────────────────────────────────
   hero: {
     eyebrow: "Free training",
@@ -287,3 +307,77 @@ export const classFull = {
   watchHref: "https://www.youtube.com/@iautomatesht",
   inlineNote: "Wrong email? Just re-submit — I'll use the most recent one.",
 } as const;
+
+/**
+ * about — content for /app/about.
+ *
+ * Source: the PBS documentary pitch "The Prompt Divide: Coding the Future"
+ * (pitch__the-prompt-divide-coding-the-future.md). The pitch is written for a
+ * broadcaster; the copy below adapts its thesis into landing-page voice —
+ * grounded, first-person where it should be, no guru cadence. The pitch's
+ * demographic framing (Black men) is kept because it's the actual positioning,
+ * stated plainly rather than as a marketing hook.
+ *
+ * `who`, `program.pillars`, `founder`, and `cta` are grounded in things that
+ * are already true elsewhere in this config, so they ship filled.
+ */
+export const about = {
+  eyebrow: "About the program",
+
+  heading: "AI is splitting the workforce in two. This is the side you want to be on.",
+
+  sub: "Agentic AI just erased the old barrier to building software. For the first time, you can ship production-grade work without a CS degree — if you learn the tools before the window closes. That's what this is about.",
+
+  // "The Prompt Divide" thesis — the documentary's core argument, in plain voice.
+  thesis: {
+    label: "The prompt divide",
+    lines: [
+      "Software used to take a degree and years of syntax. That's over. A single person using Claude Code can now orchestrate automation with n8n, stand up a full app on Next.js and Vercel, and style it with Tailwind — at a speed that didn't exist two years ago.",
+      "That shift cuts both ways. The same automation wiping out entry-level tech, admin, and logistics roles is the thing you can learn to pilot. Black men are among the most exposed to the displacement — and the least likely to have been shown the door into the tools doing it.",
+      "So this isn't a warning about AI. It's the blueprint. Learn to drive these tools and you stop being the one automated out — you become the one building the systems.",
+    ],
+  },
+
+  who: {
+    label: "Who this is for",
+    items: [
+      {
+        k: "The 9–5'er who knows AI matters",
+        v: "You're in sales, ops, admin, or marketing. You don't want to become a software engineer — you want to be the one who ships faster and gets moved up.",
+      },
+      {
+        k: "The person who was never shown the door",
+        v: "Everyone says \"learn AI.\" Nobody shows the actual screen. This is the screen — real builds, start to finish, nothing hand-waved.",
+      },
+    ],
+  },
+
+  program: {
+    label: "What the bootcamp is",
+    lines: [
+      "The IAS Bootcamp is the accelerator version of that blueprint. Not theory, not a lecture on why AI matters — you already know it does. You learn the actual stack: Claude Code in the terminal to write and ship, n8n for the enterprise logic, Next.js and Vercel to deploy, Tailwind to make it look right.",
+      "The goal is to move you from prompting novice to someone who orchestrates real systems — the person who architects the build, not the one racing the automation. Every session is a real build you keep, so what you walk away with is proof, not notes.",
+    ],
+    pillars: [
+      "Free, no-fluff training built from real work — not slides.",
+      "You leave every session with a working build you keep.",
+      "Independent web tools you can use the moment you learn the concept.",
+    ],
+  },
+
+  founder: {
+    label: "Who's behind it",
+    name: "Steve Berry",
+    role: "Automation engineer. Builds in public.",
+    body:
+      "I build automation systems for a living and I put the work on camera — the wins and the parts that break. I'm doing this because when I was figuring it out, there wasn't anybody who looked like me showing the actual screen. So I'm the one.",
+    proofLabel: "Watch the builds",
+  },
+
+  cta: {
+    heading: "Ready to see how it actually works?",
+    button: "Watch the free training",
+  },
+} as const;
+
+export type About = typeof about;

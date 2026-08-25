@@ -7,7 +7,7 @@ import { VideoFrame } from "@/components/VideoFrame";
 import { SignalRail } from "@/components/SignalRail";
 import { LeadForm } from "@/components/LeadForm";
 import { SiteFooter } from "@/components/SiteFooter";
-import { BrandLogo } from "@/components/BrandLogo";
+import { SiteHeader } from "@/components/SiteHeader";
 
 export default function VslPage() {
   const [ctaReady, setCtaReady] = useState(false);
@@ -25,19 +25,7 @@ export default function VslPage() {
   return (
     <main className="min-h-screen bg-white">
       {/* Top bar */}
-      <header className="border-b border-hair">
-        <div className="mx-auto flex max-w-page items-center justify-between px-6 py-4">
-          <a href="/" aria-label={`${funnel.brand.name} home`} className="inline-flex items-center">
-            <BrandLogo variant="onLight" decorative className="h-7 w-auto" />
-          </a>
-          <a
-            href={funnel.brand.youtube}
-            className="font-mono text-xs text-muted hover:text-primary"
-          >
-            YouTube ↗
-          </a>
-        </div>
-      </header>
+      <SiteHeader />
 
       {/* Waitlist scarcity banner — only in smoke-test mode. */}
       {heroMode ? (

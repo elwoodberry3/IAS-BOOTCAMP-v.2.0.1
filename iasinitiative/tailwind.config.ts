@@ -49,6 +49,23 @@ const config: Config = {
       maxWidth: {
         page: "72rem",
       },
+      /**
+       * Site-wide corner radius = 0.25rem (UI update). Overriding the scale
+       * here means every existing `rounded`, `rounded-lg`, `rounded-xl`, and
+       * `rounded-2xl` collapses to 0.25rem with no markup changes — buttons,
+       * the YouTube facade, cards, containers, inputs. `rounded-full` is left
+       * intact for genuine circles (signal dots, step badges, avatars).
+       */
+      borderRadius: {
+        DEFAULT: "0.25rem",
+        sm: "0.25rem",
+        md: "0.25rem",
+        lg: "0.25rem",
+        xl: "0.25rem",
+        "2xl": "0.25rem",
+        "3xl": "0.25rem",
+        // `none` (0) and `full` (9999px) intentionally keep Tailwind defaults.
+      },
       keyframes: {
         signal: {
           "0%, 100%": { opacity: "1", transform: "scale(1)" },
