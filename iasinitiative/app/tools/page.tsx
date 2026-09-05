@@ -28,20 +28,12 @@ export default function ToolsPage() {
       <section className="mx-auto max-w-page px-6 pb-20">
         <ul className="grid gap-6 sm:grid-cols-2">
           {tools.map((tool) => (
-            <li
-              key={tool.title}
-              className="flex flex-col overflow-hidden border border-hair bg-white transition hover:border-secondary-200"
-            >
+            <li key={tool.title} className="flex flex-col overflow-hidden border border-hair bg-white transition hover:border-secondary-200">
               <div className="flex gap-5 p-6">
                 {/* 1:1 tool image */}
-                <div className="h-20 w-20 shrink-0 overflow-hidden border border-hair bg-ash">
-                  <img
-                    src={tool.image}
-                    alt={`${tool.title} icon`}
-                    className="h-full w-full object-cover"
-                    width={80}
-                    height={80}
-                  />
+                {/* <div className="h-20 w-20 shrink-0 overflow-hidden border border-hair bg-ash"> */}
+                <div className="h-20 w-20 shrink-0 overflow-hidden">
+                  <img src={tool.image} alt={`${tool.title} icon`} className="h-full w-full object-cover" width={80} height={80}/>
                 </div>
 
                 <div className="min-w-0">
