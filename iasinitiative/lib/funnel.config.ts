@@ -188,18 +188,6 @@ export const funnel = {
     inlineNote: "Didn't get the email in a couple minutes? Check spam, or the promotions tab.",
   },
 
-  // ── WAITLIST CONFIRMATION (linkless — no training access yet) ──────────
-  waitlistConfirmed: {
-    heading: "You're on the list.",
-    sub: "The bootcamp isn't open yet. When a seat opens up, you'll be the first to know — I'll email you the moment it's live.",
-    // Deliberately NO training link/CTA here. Waitlisters get access when the
-    // cohort opens, not before. This mirrors the linkless waitlist email so the
-    // page and the inbox tell the same honest story.
-    watchCta: "See what I build in the meantime",
-    watchHref: "https://www.youtube.com/@iautomatesht",
-    inlineNote: "Didn't get the confirmation email? Check spam or the promotions tab.",
-  },
-
   // ── VIDEO PAGE (gated content the email links to) ──────────────────────
   watch: {
     heading: "Your training",
@@ -220,93 +208,18 @@ export const funnel = {
 export type Funnel = typeof funnel;
 
 /**
- * Funnel mode — smoke-test switch.
+ * Build state model — future / live / past.
  *
- *   FUNNEL_MODE=live      → real VSL funnel, submit routes to /thank-you.
- *   FUNNEL_MODE=waitlist  → fake-door / smoke test. Submit routes to /class-full,
- *                           stamps funnel_variant=waitlist so n8n branches to the
- *                           "notify me when spots open" Resend email + drip.
+ * There is no "class full" or waitlist concept. A build is either upcoming,
+ * happening now, or already happened. The SITE always captures a real lead and
+ * routes to /thank-you; WHICH email that lead receives (confirmation, live, or
+ * VOD) is decided downstream by the "Build Bootcamp Email" n8n node, which reads
+ * the stream calendar's state. The site does not need to know the state — it
+ * just captures honestly and lets the calendar drive the message.
  *
- * This is a build-time public flag so both server (redirect-safety) and client
- * (form redirect) read the same value. Flip it in Vercel env and redeploy — no
- * code change. Default is "live" so a missing env never fakes a full class.
- *
- * Governance (Article IX): the waitlist is honest — the cohort genuinely isn't
- * open yet because the content is still being built. Real capture, real list,
- * real "we'll notify you." Not a dead end.
+ * Governance (Article IX): honest by construction. No scarcity theater, no
+ * fake-full door. Every submit is a real capture into a real list.
  */
-export type FunnelMode = "live" | "waitlist";
-
-/**
- * Resolve the funnel mode from env, defaulting to "live".
- *
- * Each helper reads process.env.NEXT_PUBLIC_FUNNEL_MODE *directly* so Next can
- * statically inline it into the client bundle. Do NOT build a chain of consts
- * that reference each other (funnelMode → isWaitlist → submitRedirect): in the
- * production bundle those intermediate consts can evaluate before their
- * dependency is initialized and resolve to `undefined`, which is what made
- * router.push(submitRedirect) throw "Cannot read properties of undefined
- * (reading 'startsWith')". A function that always returns a string can't.
- */
-export function getFunnelMode(): FunnelMode {
-  return process.env.NEXT_PUBLIC_FUNNEL_MODE === "waitlist" ? "waitlist" : "live";
-}
-
-export const funnelMode: FunnelMode = getFunnelMode();
-
-export const isWaitlist = getFunnelMode() === "waitlist";
-
-/**
- * Where a successful submit lands, by mode. Function, not a bare const — it
- * always returns a valid path string, so router.push() can never receive
- * undefined regardless of bundle evaluation order.
- */
-export function getSubmitRedirect(): "/class-full" | "/thank-you" {
-  return getFunnelMode() === "waitlist" ? "/class-full" : "/thank-you";
-}
-
-/** Back-compat const — safe now because getSubmitRedirect() always returns a string. */
-export const submitRedirect: "/class-full" | "/thank-you" = getSubmitRedirect();
-
-/**
- * Mode-aware hero overrides. In waitlist mode the CTA and a scarcity banner
- * change so the "door" reads as real demand — enterprise smoke tests surface
- * the constraint on the landing page, not only after submit.
- */
-export function getHeroMode() {
-  return getFunnelMode() === "waitlist"
-    ? {
-        banner: "The current cohort is full — join the waitlist for the next one.",
-        ctaPrimary: "Join the waitlist",
-        formLabel: "Join the waitlist",
-        formHeading: "Get first access to the next cohort",
-        formSub:
-          "Spots open to this list first, before it goes public. Drop your email and I'll notify you.",
-        formSubmit: "Join the waitlist",
-      }
-    : null;
-}
-
-export const heroMode = getHeroMode();
-
-/**
- * Waitlist / "class full" confirmation copy. Headline leads with the offer
- * (you're on the list), scarcity is the reason — the 2026 waitlist-smoke-test
- * pattern, not a dead-end "Class is Full" wall.
- */
-export const classFull = {
-  eyebrow: "Enrollment closed",
-  heading: "This cohort filled up — you're on the waitlist.",
-  sub: "The current group is full. You're locked in for the next one — I'll email you the moment spots open, before it goes public.",
-  points: [
-    "You're on the list. No further action needed.",
-    "Next cohort opens first to this waitlist — you'll get the heads-up early.",
-    "While you wait, watch how I actually build. Same work, on camera.",
-  ],
-  watchCta: "Watch a build while you wait",
-  watchHref: "https://www.youtube.com/@iautomatesht",
-  inlineNote: "Wrong email? Just re-submit — I'll use the most recent one.",
-} as const;
 
 /**
  * about — content for /app/about.

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { funnel, getHeroMode } from "@/lib/funnel.config";
+import { funnel } from "@/lib/funnel.config";
 import { track } from "@/lib/track";
 import { VideoFrame } from "@/components/VideoFrame";
 import { SignalRail } from "@/components/SignalRail";
@@ -11,7 +11,6 @@ import { SiteHeader } from "@/components/SiteHeader";
 
 export default function VslPage() {
   const [ctaReady, setCtaReady] = useState(false);
-  const heroMode = getHeroMode();
 
   useEffect(() => {
     track("page_view", { page: "vsl" });
@@ -26,19 +25,6 @@ export default function VslPage() {
     <main className="min-h-screen bg-white">
       {/* Top bar */}
       <SiteHeader />
-
-      {/* Waitlist scarcity banner — only in smoke-test mode. */}
-      {heroMode ? (
-        <div className="border-b border-hair bg-primary">
-          <div className="mx-auto flex max-w-page items-center justify-center gap-2 px-6 py-2.5">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-signal rounded-full bg-accent" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
-            </span>
-            <p className="font-mono text-xs text-white">{heroMode.banner}</p>
-          </div>
-        </div>
-      ) : null}
 
       {/* HERO + VSL */}
       <section className="mx-auto max-w-page px-6 pt-14 pb-10 sm:pt-20">
@@ -56,7 +42,7 @@ export default function VslPage() {
                 onClick={scrollToForm}
                 className="rounded-lg bg-accent px-6 py-3.5 text-sm font-semibold text-primary transition hover:bg-accent-600"
               >
-                {heroMode?.ctaPrimary ?? funnel.hero.ctaPrimary}
+                {funnel.hero.ctaPrimary}
               </button>
               <span className="font-mono text-xs text-muted">{funnel.hero.ctaNote}</span>
             </div>
@@ -174,7 +160,7 @@ export default function VslPage() {
             onClick={scrollToForm}
             className="ml-auto rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-primary hover:bg-accent-600"
           >
-            {heroMode?.ctaPrimary ?? funnel.hero.ctaPrimary}
+            {funnel.hero.ctaPrimary}
           </button>
         </div>
       </div>

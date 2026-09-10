@@ -23,19 +23,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: "A valid email is required" }, { status: 422 });
   }
 
-  // Funnel mode is authoritative on the server — the client can't fake which
-  // drip a lead enters. n8n branches on funnel_variant:
-  //   "waitlist" → "we'll notify you when spots open" Resend email + waitlist drip
-  //   "live"     → training-delivery Resend email + main drip
-  const mode = process.env.FUNNEL_MODE === "waitlist" ? "waitlist" : "live";
-
-const record = {
-  intent: "confirmed",        // safe default…
-  ...payload,                 // …overridden by whatever the form sent
-  source: "ias-vsl",
-  submitted_at: new Date().toISOString(),
-  user_agent: req.headers.get("user-agent") ?? "",
-};
+  // Every lead is a real capture. There is no waitlist/class-full branch — the
+  // email a lead receives (confirmation / live / VOD) is decided downstream by
+  // the Build Bootcamp Email n8n node from the stream calendar's state.
+  const record = {
+    intent: "confirmed",        // safe default…
+    ...payload,                 // …overridden by whatever the form sent
+    source: "ias-vsl",          // funnel tag; n8n maps this to a valid ias_source
+    submitted_at: new Date().toISOString(),
+    user_agent: req.headers.get("user-agent") ?? "",
+  };
 
   const webhook = process.env.N8N_LEAD_WEBHOOK_URL;
   if (!webhook) {

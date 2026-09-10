@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { funnel, getFunnelMode, getSubmitRedirect, getHeroMode } from "@/lib/funnel.config";
+import { funnel } from "@/lib/funnel.config";
 import { track } from "@/lib/track";
 
 type Field = {
@@ -18,8 +18,7 @@ const cfg = funnel.capture;
 
 export function LeadForm() {
   const router = useRouter();
-  const mode = getFunnelMode();
-  const heroMode = getHeroMode();
+
   const [step, setStep] = useState(0);
   const [values, setValues] = useState<Record<string, string>>({});
   const [error, setError] = useState<string | null>(null);
@@ -54,23 +53,23 @@ export function LeadForm() {
     if (v) return setError(v);
     setError(null);
     setBusy(true);
-    track(mode === "waitlist" ? "waitlist_submit" : "lead_submit");
+    track("lead_submit");
     try {
       const res = await fetch("/api/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        // funnel_variant is also enforced server-side; sending it here keeps
-        // client analytics and the stored record consistent.
-        body: JSON.stringify({ ...values, intent: mode === "waitlist" ? "waitlist" : "confirmed" }),
+        // Every submit is a real capture. The email the lead receives is chosen
+        // downstream by the Build Bootcamp Email node from the calendar state.
+        body: JSON.stringify({ ...values, intent: "confirmed" }),
       });
       const data = await res.json();
       if (!res.ok || data.ok === false) {
         throw new Error(data.error || "Something went wrong. Try again.");
       }
-      track(mode === "waitlist" ? "waitlist_conversion" : "conversion", {
+      track("conversion", {
         email_domain: values.email?.split("@")[1],
       });
-      router.push(mode === "waitlist" ? "/waitlist-confirmed" : "/thank-you");
+      router.push("/thank-you");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Something went wrong. Try again.");
       setBusy(false);
@@ -80,14 +79,14 @@ export function LeadForm() {
   return (
     <div className="rounded-2xl border border-hair bg-white p-6 shadow-sm sm:p-8">
       <div className="mb-6 flex items-center justify-between">
-        <p className="eyebrow">{heroMode?.formLabel ?? cfg.label}</p>
+        <p className="eyebrow">{cfg.label}</p>
         <p className="font-mono text-xs text-muted">
           {step + 1} / {steps.length}
         </p>
       </div>
 
-      <h2 className="font-display text-2xl font-semibold text-primary">{heroMode?.formHeading ?? cfg.heading}</h2>
-      <p className="mt-2 text-sm text-body">{heroMode?.formSub ?? cfg.sub}</p>
+      <h2 className="font-display text-2xl font-semibold text-primary">{cfg.heading}</h2>
+      <p className="mt-2 text-sm text-body">{cfg.sub}</p>
 
       {/* step progress */}
       <div className="mt-5 flex gap-1.5" aria-hidden>
@@ -165,7 +164,7 @@ export function LeadForm() {
           disabled={busy}
           className="flex-1 rounded-lg bg-accent px-5 py-3 text-sm font-semibold text-primary transition hover:bg-accent-600 disabled:opacity-60"
         >
-          {busy ? cfg.submitting : isLast ? (heroMode?.formSubmit ?? cfg.submit) : "Continue"}
+          {busy ? cfg.submitting : isLast ? cfg.submit : "Continue"}
         </button>
       </div>
 
