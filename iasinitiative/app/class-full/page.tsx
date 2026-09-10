@@ -18,7 +18,7 @@ import { SiteFooter } from "@/components/SiteFooter";
  */
 export default function ClassFullPage() {
   const router = useRouter();
-  const isWaitlist = getFunnelMode() === "waitlist";
+  const isWaitlist = getFunnelMode() === "live";
 
   useEffect(() => {
     if (!isWaitlist) {
