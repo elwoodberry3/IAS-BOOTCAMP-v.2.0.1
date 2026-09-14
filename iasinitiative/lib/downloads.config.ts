@@ -91,7 +91,7 @@ export const downloads: Download[] = [
     image: "/pngs/downloads/agentic-maturity-ladder.png",
     build: "Build 023 — Cheatsheet 00: Onboarding",
     repoPath: "pdfs/agentic-maturity-ladder.pdf",
-    status: "soon",
+    status: "live",
   },
   {
     slug: "claude-code-control-panel",
@@ -103,7 +103,7 @@ export const downloads: Download[] = [
     image: "/pngs/downloads/claude-code-control-panel.png",
     build: "Build 024 — Cheatsheet 01: Actions",
     repoPath: "pdfs/claude-code-control-panel.pdf",
-    status: "soon",
+    status: "live",
   },
   {
     slug: "which-claude-model-when",
@@ -115,7 +115,7 @@ export const downloads: Download[] = [
     image: "/pngs/downloads/which-claude-model-when.png",
     build: "Build 025 — Cheatsheet 02: Models",
     repoPath: "pdfs/which-claude-model-when.pdf",
-    status: "soon",
+    status: "live",
   },
   {
     slug: "permission-modes-and-autonomy",
@@ -127,7 +127,7 @@ export const downloads: Download[] = [
     image: "/pngs/downloads/permission-modes-and-autonomy.png",
     build: "Build 026 — Cheatsheet 04: Modes",
     repoPath: "pdfs/permission-modes-and-autonomy.pdf",
-    status: "soon",
+    status: "live",
   },
 ];
 
