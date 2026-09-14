@@ -31,6 +31,7 @@ export const funnel = {
   // Header link set. Tools + About only — no social in the header (social
   // lives in the footer). Config, not markup, so the set is edited here.
   nav: [
+    { label: "Downloads", href: "/downloads" },
     { label: "Tools", href: "/tools" },
     { label: "About", href: "/about" },
   ],

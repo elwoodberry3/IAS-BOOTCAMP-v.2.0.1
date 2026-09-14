@@ -21,6 +21,7 @@ export type TrackEvent =
   | "cta_click"
   | "lead_step_2"
   | "lead_submit"
+  | "download"
   | "conversion";
 
 export async function track(event: TrackEvent, meta: Record<string, unknown> = {}) {
