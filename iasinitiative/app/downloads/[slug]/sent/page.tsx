@@ -1,85 +1,62 @@
-/* eslint-disable @next/next/no-img-element */
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SiteHeader } from "@/components/SiteHeader";
+import { notFound } from "next/navigation";
 import { SiteFooter } from "@/components/SiteFooter";
-import { downloadsPage, downloads } from "@/lib/downloads.config";
+import { SiteHeader } from "@/components/SiteHeader";
+import { downloads, getDownload } from "@/lib/downloads.config";
 
 export const metadata: Metadata = {
-  title: "Downloads — The IAS Bootcamp",
-  description:
-    "Free, IAS-branded cheatsheets for agentic developers — reference cards built from real Claude Code work. From I Automate Shit.",
+  title: "Check your email — IAS Downloads",
+  robots: { index: false, follow: false },
 };
 
-export default function DownloadsPage() {
+export function generateStaticParams() {
+  return downloads.map((d) => ({ slug: d.slug }));
+}
+
+export default async function DownloadSentPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const d = getDownload(slug);
+  if (!d) notFound();
+
   return (
-    <main className="min-h-screen bg-white">
+    <main className="flex min-h-screen flex-col bg-white">
       <SiteHeader />
-
-      {/* HERO — matches the /tools + homepage hero rhythm */}
-      <section className="mx-auto max-w-page px-6 pt-14 pb-6 sm:pt-20">
-        <p className="eyebrow mb-4">{downloadsPage.eyebrow}</p>
-        <h1 className="max-w-3xl font-display text-4xl font-bold leading-[1.08] tracking-tight text-primary sm:text-5xl">
-          {downloadsPage.heading}
-        </h1>
-        <p className="mt-6 max-w-2xl text-lg leading-relaxed text-body">{downloadsPage.sub}</p>
+      <section className="mx-auto flex w-full max-w-page flex-1 items-center px-6 py-20">
+        <div className="mx-auto max-w-2xl text-center">
+          <span className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-full bg-accent">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
+              <path
+                d="M5 13l4 4L19 7"
+                stroke="#0A2E36"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </span>
+          <h1 className="font-display text-3xl font-bold tracking-tight text-primary sm:text-4xl">
+            Check your email.
+          </h1>
+          <p className="mt-4 text-lg leading-relaxed text-body">
+            The download link for <span className="font-semibold text-primary">{d.title}</span> is on
+            its way to your inbox. The link is good for 24 hours.
+          </p>
+          <p className="mt-6 font-mono text-xs text-muted">
+            Didn&apos;t get it in a couple minutes? Check spam or the promotions tab.
+          </p>
+          <Link
+            href="/downloads"
+            className="mt-8 inline-flex items-center gap-2 rounded-lg border border-hair px-6 py-3.5 text-sm font-semibold text-body transition hover:bg-ash"
+          >
+            ← Back to downloads
+          </Link>
+        </div>
       </section>
-
-      {/* GRID — "Recommended for you" (wireframe 1). Config-driven; scales to ∞. */}
-      <section className="mx-auto max-w-page px-6 pb-20">
-        <p className="mb-6 font-display text-lg font-semibold text-primary">
-          {downloadsPage.recommendedLabel}
-        </p>
-        <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {downloads.map((d) => (
-            <li
-              key={d.slug}
-              className="flex flex-col overflow-hidden border border-hair bg-white transition hover:border-secondary-200"
-            >
-              <Link href={`/downloads/${d.slug}`} className="flex flex-1 flex-col">
-                {/* 16:9 illustration */}
-                <div className="aspect-video w-full overflow-hidden border-b border-hair bg-ash">
-                  <img
-                    src={d.image}
-                    alt={`${d.title} cheatsheet illustration`}
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-
-                <div className="flex flex-1 flex-col p-5">
-                  <div className="flex items-center gap-2">
-                    {d.status === "live" ? (
-                      <span className="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-accent-600">
-                        <span className="block h-2 w-2 rounded-full bg-accent animate-signal" />
-                        Live
-                      </span>
-                    ) : (
-                      <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
-                        Soon
-                      </span>
-                    )}
-                  </div>
-                  <h2 className="mt-2 font-display text-lg font-semibold leading-snug text-primary">
-                    {d.title}
-                  </h2>
-                  <p className="mt-2 text-sm leading-relaxed text-body">{d.summary}</p>
-                  <p className="mt-auto pt-4 font-mono text-[11px] text-muted">{d.build}</p>
-                </div>
-              </Link>
-
-              <div className="border-t border-hair p-4">
-                <Link
-                  href={`/downloads/${d.slug}`}
-                  className="inline-flex items-center gap-2 bg-accent px-5 py-2.5 text-sm font-semibold text-primary transition hover:bg-accent-600"
-                >
-                  {d.status === "live" ? "Get the PDF" : "Preview"} <span aria-hidden>→</span>
-                </Link>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </section>
-
       <SiteFooter />
     </main>
   );
