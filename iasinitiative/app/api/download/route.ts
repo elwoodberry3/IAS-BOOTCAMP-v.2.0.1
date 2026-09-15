@@ -113,9 +113,12 @@ export async function POST(req: NextRequest) {
   const link = downloadUrl(origin, token);
 
   // ── 3. Email the link (Resend), no attachment ─────────────────────────────
-  const apiKey = process.env.RESEND_API_KEY;
+  // Accept either name so a rename on the Vercel side can't silently break
+  // delivery. Project env uses RESEND_API; RESEND_API_KEY is the conventional
+  // fallback.
+  const apiKey = process.env.RESEND_API || process.env.RESEND_API_KEY;
   if (!apiKey) {
-    console.error("[download] RESEND_API_KEY unset.");
+    console.error("[download] Resend API key unset (RESEND_API / RESEND_API_KEY).");
     return NextResponse.json({ ok: false, error: "Email service not configured." }, { status: 500 });
   }
   const resend = new Resend(apiKey);
@@ -141,7 +144,7 @@ export async function POST(req: NextRequest) {
 
   try {
     await resend.emails.send({
-      from: process.env.SEND_FROM || "IAS <build@i-automate-shit.com>",
+      from: process.env.RESEND_FROM || process.env.SEND_FROM || "IAS <build@i-automate-shit.com>",
       to: email,
       subject: `Your cheatsheet: ${download.title}`,
       html,
